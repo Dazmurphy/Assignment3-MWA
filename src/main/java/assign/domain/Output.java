@@ -7,14 +7,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "output")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Output {
-	
+
 	String error = "";
-	
-	public String getError(){
+
+	public String getError() {
 		return error;
 	}
-	
-	public void addError(String newError){
+
+	public void addError(String newError) {
 		this.error = newError;
 	}
 

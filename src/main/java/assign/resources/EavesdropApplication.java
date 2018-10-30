@@ -8,23 +8,22 @@ import javax.ws.rs.core.Application;
 
 @ApplicationPath("/")
 public class EavesdropApplication extends Application {
-	
+
 	private Set<Object> singletons = new HashSet<Object>();
 	private Set<Class<?>> classes = new HashSet<Class<?>>();
-	
-	public EavesdropApplication() {		
+
+	public EavesdropApplication() {
 	}
-	
+
 	@Override
 	public Set<Class<?>> getClasses() {
 		classes.add(EavesdropResource.class);
 		return classes;
 	}
-	
+
 	@Override
 	public Set<Object> getSingletons() {
 		return singletons;
 	}
-	
-	
+
 }

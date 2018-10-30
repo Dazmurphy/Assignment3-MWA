@@ -21,58 +21,58 @@ import assign.services.EavesdropService;
 
 @Path("/myeavesdrop")
 public class EavesdropResource {
-	
+
 	EavesdropService eavesdropService;
 	Projects projects;
 	Meetings meetings;
 	Output error;
-	
+
 	public EavesdropResource() {
 		this.eavesdropService = new EavesdropService();
 	}
-	
+
 	@GET
 	@Path("/projects")
 	@Produces("application/xml")
 	public StreamingOutput getProjects() {
 		projects = this.eavesdropService.retrieveProjects();
-		
-		return new StreamingOutput(){
+
+		return new StreamingOutput() {
 			public void write(OutputStream outputStream) throws IOException, WebApplicationException {
 				outputProjects(outputStream, projects);
 			}
 		};
 	}
-	
+
 	@GET
 	@Path("/projects/{project}/meetings")
 	@Produces("application/xml")
 	public StreamingOutput getProjectMeetings(@PathParam("project") String project) {
 		meetings = this.eavesdropService.retrieveProjectMeetings(project);
-		
-		if(meetings == null){
+
+		if (meetings == null) {
 			error = new Output();
 			error.addError("Project " + project + " does not exist");
-			
-			return new StreamingOutput(){
+
+			return new StreamingOutput() {
 				public void write(OutputStream outputStream) throws IOException, WebApplicationException {
 					outputError(outputStream, error);
 				}
 			};
-		}else{
-			return new StreamingOutput(){
+		} else {
+			return new StreamingOutput() {
 				public void write(OutputStream outputStream) throws IOException, WebApplicationException {
 					outputMeetings(outputStream, meetings);
 				}
 			};
 		}
 	}
-	
+
 	protected void outputProjects(OutputStream os, Projects projects) throws IOException {
-		try { 
+		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Projects.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-	 
+
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.marshal(projects, os);
 		} catch (JAXBException jaxb) {
@@ -80,12 +80,12 @@ public class EavesdropResource {
 			throw new WebApplicationException();
 		}
 	}
-	
+
 	protected void outputMeetings(OutputStream os, Meetings meetings) throws IOException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Meetings.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-	 
+
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.marshal(meetings, os);
 		} catch (JAXBException jaxb) {
@@ -93,12 +93,12 @@ public class EavesdropResource {
 			throw new WebApplicationException();
 		}
 	}
-	
+
 	protected void outputError(OutputStream os, Output output) throws IOException {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Output.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-	 
+
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.marshal(output, os);
 		} catch (JAXBException jaxb) {
